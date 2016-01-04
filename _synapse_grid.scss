@@ -1,0 +1,158 @@
+// Function to get deeper map values in the mixin
+// Used to get setting values in the mixin
+@function map-deep-get($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}
+
+// Function to add generated map values for padding and margin to the utilities map
+@function map-set($name, $property, $value, $map) {
+  $new: (
+    $name: (
+      property: $property,
+      value: $value
+    )
+  );
+  @return map-merge($map, $new);
+}
+
+/*
+
+Below is an example of how to configure Synapse's settings for the grid
+You will need to declare this variable for Synapse to work
+
+$synapse: (
+  columns: 12,
+  layouts: (
+        xs:  0px,
+        sm:  480px, 
+        md:  787px,
+        lg: 1024px,
+        xlg: 1200px
+    ),
+  spaceUnits: (8px, 1em, 2em, 3em, 4em),
+);
+*/
+
+// List of all basic utilities, easy to edit.
+// The same of each sub-map is the utility name to reference in the mixin
+// The properties and values are the utilities' CSS components
+$utilitiesList: (
+    align-c: ( 
+      property: text-align,
+      value: center
+    ),
+    align-l: ( 
+      property: text-align,
+      value: left
+    ),
+    align-r: ( 
+      property: text-align,
+      value: right
+    ),
+    float-r: ( 
+      property: float,
+      value: right
+    ),
+    float-l: ( 
+      property: float,
+      value: left
+    ),
+    float-n: ( 
+      property: float,
+      value: none
+    ),
+    block: ( 
+      property: display,
+      value: block !important
+    ),
+    i-block: ( 
+      property: display,
+      value: inline-block !important
+    ),
+    inline: ( 
+      property: display,
+      value: inline !important
+    ),
+    border-b: ( 
+      property: box-sizing,
+      value: border-box
+    ),
+    center-m: ( 
+      property: margin,
+      value: 0 auto
+    ),
+    hide: (
+      property: display,
+      value: none !important
+    )
+  );
+
+// Get a list of spacing variables from the settings
+$spacing: map-get($synapse, spaceUnits);
+
+// Loop through the spacing settings and generate all the utilities 
+// for padding and margin placement
+@each $size in $spacing {
+   $i: index($spacing, $size);
+  
+  $utilitiesList: map-set(pad-#{$i}, padding, $size, $utilitiesList);
+  $utilitiesList: map-set(pad-t-#{$i}, padding-top, $size, $utilitiesList);
+  $utilitiesList: map-set(pad-r-#{$i}, padding-right, $size, $utilitiesList);
+  $utilitiesList: map-set(pad-b-#{$i}, padding-bottom, $size, $utilitiesList);
+  $utilitiesList: map-set(pad-l-#{$i}, padding-left, $size, $utilitiesList);
+  $utilitiesList: map-set(pad-vert-#{$i}, padding, $size 0, $utilitiesList);
+  $utilitiesList: map-set(pad-sides-#{$i}, padding, 0 $size, $utilitiesList);
+
+  $utilitiesList: map-set(marg-#{$i}, margin, $size, $utilitiesList);
+  $utilitiesList: map-set(marg-t-#{$i}, margin-top, $size, $utilitiesList);
+  $utilitiesList: map-set(marg-r-#{$i}, margin-right, $size, $utilitiesList);
+  $utilitiesList: map-set(marg-b-#{$i}, margin-bottom, $size, $utilitiesList);
+  $utilitiesList: map-set(marg-l-#{$i}, margin-left, $size, $utilitiesList);
+  $utilitiesList: map-set(marg-vert-#{$i}, margin, $size 0, $utilitiesList);
+  $utilitiesList: map-set(marg-sides-#{$i}, margin, 0 $size, $utilitiesList);
+
+}
+
+// Setup for the actual synapse mixin
+@mixin syn($breakpoint, $columns, $offset, $utilities) {
+    // The width of the breakpoint specificied
+    $breakpointWidth: map-deep-get($synapse, "layouts", $breakpoint);
+    // The total number of columns from the settings
+    $totalColumns: map-get($synapse, "columns");
+    
+    // Sets up the media query and adds the basic grid properties and
+    // width based on the number of columns in the mixin
+    @media screen and (min-width: $breakpointWidth) {
+      width: percentage($columns/$totalColumns);
+      margin: 0;
+      float: left;
+      clear: none;
+      
+      // Loops through all utilities used in the mixin and adds their
+      // CSS properties to the element in the media query
+      @for $i from 1 through length($utilities) {
+        $utilityName: nth($utilities, $i);
+        $property: map-deep-get($utilitiesList, $utilityName, "property");
+        $value: map-deep-get($utilitiesList, $utilityName, "value");
+        
+        #{$property}: $value;
+      }
+      
+      // If a number of offset columns were specified, adds them here
+      // Can be positive or negative for a push or pull effect
+      @if ($offset) and ($offset != 0) {
+        margin-left: percentage($offset/$totalColumns);
+      }
+    }
+}
+
+.container-new {
+  @include syn(sm, 12, 2, (align-l, float-r)); 
+  
+  @include syn(md, 8, 2, (align-c, pad-2, marg-1)); 
+  
+  @include syn(lg, 6, 0, (align-r, pad-4)); 
+}

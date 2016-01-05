@@ -83,6 +83,10 @@ $utilitiesList: (
     hide: (
       property: display,
       value: none !important
+    ),
+    end-col: (
+      property: margin-right,
+      value: 0 !important
     )
   );
 
@@ -94,6 +98,7 @@ $spacing: map-get($synapse, spaceUnits);
 @each $size in $spacing {
    $i: index($spacing, $size);
   
+  $utilitiesList: map-set(pad-0, padding, 0, $utilitiesList);
   $utilitiesList: map-set(pad-#{$i}, padding, $size, $utilitiesList);
   $utilitiesList: map-set(pad-t-#{$i}, padding-top, $size, $utilitiesList);
   $utilitiesList: map-set(pad-r-#{$i}, padding-right, $size, $utilitiesList);
@@ -102,6 +107,7 @@ $spacing: map-get($synapse, spaceUnits);
   $utilitiesList: map-set(pad-vert-#{$i}, padding, $size 0, $utilitiesList);
   $utilitiesList: map-set(pad-sides-#{$i}, padding, 0 $size, $utilitiesList);
 
+  $utilitiesList: map-set(marg-0, margin, 0, $utilitiesList);
   $utilitiesList: map-set(marg-#{$i}, margin, $size, $utilitiesList);
   $utilitiesList: map-set(marg-t-#{$i}, margin-top, $size, $utilitiesList);
   $utilitiesList: map-set(marg-r-#{$i}, margin-right, $size, $utilitiesList);
@@ -141,6 +147,10 @@ $spacing: map-get($synapse, spaceUnits);
           $value: map-deep-get($utilitiesList, $utilityName, "value");
           
           #{$property}: $value;
+
+          @if ($utilityName == 'end-col') or ($columns == 12) {
+            width: $widthPer;
+          }
         }
       }
       

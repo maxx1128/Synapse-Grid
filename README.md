@@ -24,8 +24,12 @@ $synapse: (
         xlg: 1200px
     ),
   spaceUnits: (8px, 1em, 2em, 3em, 4em),
+  side-margin: 1em
+
 );
 ```
+
+> Side margin is the margin on the right of every column that separates it from the others.
 
 You can make the values whatever you want and add however many you want, so Synapse is very flexible.
 
@@ -80,7 +84,6 @@ All the included utility classes are:
 * **block**: Display as block
 * **i-block**: Display as inline block
 * **inline**: Display as inline
-* **border-b**: Set box-sizing to border-box
 * **center-m**: Sets margin to "0 auto"
 * **hide**: Hides elements with display:none
 * **pad-#**: Adds custom padding to all sides

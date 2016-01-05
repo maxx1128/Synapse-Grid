@@ -18,11 +18,7 @@
   @return map-merge($map, $new);
 }
 
-/*
-
-Below is an example of how to configure Synapse's settings for the grid
-You will need to declare this variable for Synapse to work
-
+// An example of how to configure Synapse's settings for the grid
 $synapse: (
   columns: 12,
   layouts: (
@@ -33,8 +29,8 @@ $synapse: (
         xlg: 1200px
     ),
   spaceUnits: (8px, 1em, 2em, 3em, 4em),
+  side-margin: 1em
 );
-*/
 
 // List of all basic utilities, easy to edit.
 // The same of each sub-map is the utility name to reference in the mixin
@@ -98,7 +94,6 @@ $spacing: map-get($synapse, spaceUnits);
 @each $size in $spacing {
    $i: index($spacing, $size);
   
-  $utilitiesList: map-set(pad-0, padding, 0, $utilitiesList);
   $utilitiesList: map-set(pad-#{$i}, padding, $size, $utilitiesList);
   $utilitiesList: map-set(pad-t-#{$i}, padding-top, $size, $utilitiesList);
   $utilitiesList: map-set(pad-r-#{$i}, padding-right, $size, $utilitiesList);
@@ -107,7 +102,6 @@ $spacing: map-get($synapse, spaceUnits);
   $utilitiesList: map-set(pad-vert-#{$i}, padding, $size 0, $utilitiesList);
   $utilitiesList: map-set(pad-sides-#{$i}, padding, 0 $size, $utilitiesList);
 
-  $utilitiesList: map-set(marg-0, margin, 0, $utilitiesList);
   $utilitiesList: map-set(marg-#{$i}, margin, $size, $utilitiesList);
   $utilitiesList: map-set(marg-t-#{$i}, margin-top, $size, $utilitiesList);
   $utilitiesList: map-set(marg-r-#{$i}, margin-right, $size, $utilitiesList);
@@ -124,20 +118,19 @@ $spacing: map-get($synapse, spaceUnits);
     $breakpointWidth: map-deep-get($synapse, "layouts", $breakpoint);
     // The total number of columns from the settings
     $totalColumns: map-get($synapse, "columns");
+    $sideMargin: map-get($synapse, "side-margin");
+    $widthPer: percentage($columns/$totalColumns);
     
     // Sets up the media query and adds the basic grid properties and
     // width based on the number of columns in the mixin
     @media screen and (min-width: $breakpointWidth) {
-      width: percentage($columns/$totalColumns);
-      margin: 0;
+      width: -webkit-calc(#{$widthPer} - #{$sideMargin});
+      width: -moz-calc(#{$widthPer} - #{$sideMargin});
+      width: calc(#{$widthPer} - #{$sideMargin});
+      margin-right: $sideMargin;
+      box-sizing: border-box;
       float: left;
       clear: none;
-
-      // If a number of offset columns were specified, adds them here
-      // Can be positive or negative for a push or pull effect
-      @if ($offset) and ($offset != 0) {
-        margin-left: percentage($offset/$totalColumns);
-      }
       
       // Loops through all utilities used in the mixin and adds their
       // CSS properties to the element in the media query
@@ -149,6 +142,12 @@ $spacing: map-get($synapse, spaceUnits);
           
           #{$property}: $value;
         }
+      }
+      
+      // If a number of offset columns were specified, adds them here
+      // Can be positive or negative for a push or pull effect
+      @if ($offset) {
+        margin-left: percentage($offset/$totalColumns);
       }
     }
 }

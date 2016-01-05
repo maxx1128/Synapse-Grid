@@ -31,7 +31,7 @@ $synapse: (
 
 > Side margin is the margin on the right of every column that separates it from the others.
 
-You can make the values whatever you want and add however many you want, so Synapse is very flexible.
+You can make the values whatever you want and add however many you want, so Synapse is very flexible. These are set as the defaults, but you can declare your own map to override them for a more custom Synapse grid.
 
 ## Use the Synapse mixin to create your grid
 

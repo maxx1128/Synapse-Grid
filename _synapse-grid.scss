@@ -152,11 +152,3 @@ $spacing: map-get($synapse, spaceUnits);
       }
     }
 }
-
-.container-new {
-  @include syn(sm, 12, 2, (align-l, float-r)); 
-  
-  @include syn(md, 8, 2, (align-c, pad-2, marg-1)); 
-  
-  @include syn(lg, 6, 0, (align-r, pad-4)); 
-}

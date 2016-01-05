@@ -98,6 +98,7 @@ $spacing: map-get($synapse, spaceUnits);
 @each $size in $spacing {
    $i: index($spacing, $size);
   
+  $utilitiesList: map-set(pad-0, padding, 0, $utilitiesList);
   $utilitiesList: map-set(pad-#{$i}, padding, $size, $utilitiesList);
   $utilitiesList: map-set(pad-t-#{$i}, padding-top, $size, $utilitiesList);
   $utilitiesList: map-set(pad-r-#{$i}, padding-right, $size, $utilitiesList);
@@ -106,6 +107,7 @@ $spacing: map-get($synapse, spaceUnits);
   $utilitiesList: map-set(pad-vert-#{$i}, padding, $size 0, $utilitiesList);
   $utilitiesList: map-set(pad-sides-#{$i}, padding, 0 $size, $utilitiesList);
 
+  $utilitiesList: map-set(marg-0, margin, 0, $utilitiesList);
   $utilitiesList: map-set(marg-#{$i}, margin, $size, $utilitiesList);
   $utilitiesList: map-set(marg-t-#{$i}, margin-top, $size, $utilitiesList);
   $utilitiesList: map-set(marg-r-#{$i}, margin-right, $size, $utilitiesList);
@@ -117,7 +119,7 @@ $spacing: map-get($synapse, spaceUnits);
 }
 
 // Setup for the actual synapse mixin
-@mixin syn($breakpoint, $columns, $offset, $utilities) {
+@mixin syn($breakpoint, $columns, $offset, $utilities: none) {
     // The width of the breakpoint specificied
     $breakpointWidth: map-deep-get($synapse, "layouts", $breakpoint);
     // The total number of columns from the settings
@@ -130,21 +132,23 @@ $spacing: map-get($synapse, spaceUnits);
       margin: 0;
       float: left;
       clear: none;
-      
-      // Loops through all utilities used in the mixin and adds their
-      // CSS properties to the element in the media query
-      @for $i from 1 through length($utilities) {
-        $utilityName: nth($utilities, $i);
-        $property: map-deep-get($utilitiesList, $utilityName, "property");
-        $value: map-deep-get($utilitiesList, $utilityName, "value");
-        
-        #{$property}: $value;
-      }
-      
+
       // If a number of offset columns were specified, adds them here
       // Can be positive or negative for a push or pull effect
       @if ($offset) and ($offset != 0) {
         margin-left: percentage($offset/$totalColumns);
+      }
+      
+      // Loops through all utilities used in the mixin and adds their
+      // CSS properties to the element in the media query
+      @if ($utilities != '') {
+        @for $i from 1 through length($utilities) {
+          $utilityName: nth($utilities, $i);
+          $property: map-deep-get($utilitiesList, $utilityName, "property");
+          $value: map-deep-get($utilitiesList, $utilityName, "value");
+          
+          #{$property}: $value;
+        }
       }
     }
 }

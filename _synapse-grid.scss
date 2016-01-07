@@ -83,10 +83,6 @@ $utilitiesList: (
     hide: (
       property: display,
       value: none !important
-    ),
-    end-col: (
-      property: margin-right,
-      value: 0 !important
     )
   );
 
@@ -133,7 +129,8 @@ $spacing: map-get($synapse, spaceUnits);
       width: -webkit-calc(#{$widthPer} - #{$sideMargin});
       width: -moz-calc(#{$widthPer} - #{$sideMargin});
       width: calc(#{$widthPer} - #{$sideMargin});
-      margin-right: $sideMargin;
+      margin-right: $sideMargin/2;
+      margin-left: $sideMargin/2;
       box-sizing: border-box;
       float: left;
       clear: none;
@@ -147,16 +144,12 @@ $spacing: map-get($synapse, spaceUnits);
           $value: map-deep-get($utilitiesList, $utilityName, "value");
           
           #{$property}: $value;
-
-          @if ($utilityName == 'end-col') or ($columns == 12) {
-            width: $widthPer;
-          }
         }
       }
       
       // If a number of offset columns were specified, adds them here
       // Can be positive or negative for a push or pull effect
-      @if ($offset) {
+      @if ($offset != 0) {
         margin-left: percentage($offset/$totalColumns);
       }
     }

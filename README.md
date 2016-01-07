@@ -29,7 +29,7 @@ $synapse: (
 );
 ```
 
-> Side margin is the margin on the right of every column that separates it from the others.
+> Side margin is the margin on the right and right of every column that separates it from the others. This value will be split in half between both sides.
 
 You can make the values whatever you want and add however many you want, so Synapse is very flexible. These are set as the defaults, but you can declare your own map to override them for a more custom Synapse grid.
 
@@ -86,7 +86,6 @@ All the included utility classes are:
 * **inline**: Display as inline
 * **center-m**: Sets margin to "0 auto"
 * **hide**: Hides elements with display:none
-* **end-col**: Add to remove the right margin to a column. Mainly used if a column is the last in a row.
 * **pad-#**: Adds custom padding to all sides
 * **pad-t-#**: Adds custom padding to all top
 * **pad-r-#**: Adds custom padding to all right

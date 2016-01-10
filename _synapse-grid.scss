@@ -121,20 +121,26 @@ $spacing: map-get($synapse, spaceUnits);
     // The total number of columns from the settings
     $totalColumns: map-get($synapse, "columns");
     $sideMargin: map-get($synapse, "side-margin");
-    $widthPer: percentage($columns/$totalColumns);
+
     
     // Sets up the media query and adds the basic grid properties and
     // width based on the number of columns in the mixin
+    box-sizing: border-box;
+
     @media screen and (min-width: $breakpointWidth) {
-      width: -webkit-calc(#{$widthPer} - #{$sideMargin});
-      width: -moz-calc(#{$widthPer} - #{$sideMargin});
-      width: calc(#{$widthPer} - #{$sideMargin});
-      margin-right: $sideMargin/2;
-      margin-left: $sideMargin/2;
-      box-sizing: border-box;
-      float: left;
-      clear: none;
       
+      @if ($columns !='none' ) {
+        $widthPer: percentage($columns/$totalColumns);
+        
+        width: -webkit-calc(#{$widthPer} - #{$sideMargin});
+        width: -moz-calc(#{$widthPer} - #{$sideMargin});
+        width: calc(#{$widthPer} - #{$sideMargin});
+        margin-right: $sideMargin/2;
+        margin-left: $sideMargin/2;
+        float: left;
+        clear: none;
+      }
+
       // Loops through all utilities used in the mixin and adds their
       // CSS properties to the element in the media query
       @if ($utilities != '') {
@@ -149,7 +155,7 @@ $spacing: map-get($synapse, spaceUnits);
       
       // If a number of offset columns were specified, adds them here
       // Can be positive or negative for a push or pull effect
-      @if ($offset != 0) {
+      @if ($offset != 0) and ($columns !='none') {
         margin-left: percentage($offset/$totalColumns);
       }
     }

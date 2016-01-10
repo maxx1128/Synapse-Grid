@@ -70,7 +70,10 @@ Some examples explaining the utility classes follow:
 @include syn(md, 8, 2, (align-c, pad-2, marg-1)); 
 // At this breakpoint text will then align to the center, have 1em padding and .5em margin on all sides
 
-@include syn(lg, 6, 0, (hide)); 
+@include syn(lg, 'none', 0, (pad-4)); 
+// The element will add extra padding without changing the width or offset
+
+@include syn(xlg, 6, 0, (hide)); 
 // The entire element will be hidden at this breakpoint
 ```
 

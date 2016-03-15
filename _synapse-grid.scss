@@ -92,7 +92,7 @@ $utilitiesList: (
 
 // Get a list of spacing variables from the settings
 $spacing: map-get($synapse, spaceUnits);
-$full-spacing: prepend($spacing, 0px);
+$full-spacing: $spacing;
 
 // Loop through the spacing settings and generate all the utilities 
 // for padding and margin placement
@@ -167,8 +167,15 @@ $full-spacing: prepend($spacing, 0px);
 }
 
 @mixin generate-padding() {
-  @for $i from 1 through length($full-spacing) {
-    $space: nth($full-spacing, $i);
+  @for $i from 1 through (length($spacing) + 1) {
+    $i: $i - 1;
+    $space: null;
+    
+    @if ( $i == 0 ) {
+      $space: 0;
+    } @else {
+      $space: nth($spacing, $i); 
+    }
     
     .pad-#{$i} {
       padding: #{$space} !important;
@@ -203,8 +210,15 @@ $full-spacing: prepend($spacing, 0px);
 }
 
 @mixin generate-margin() {
-  @for $i from 1 through length($full-spacing) {
-    $space: nth($full-spacing, $i);
+  @for $i from 1 through (length($spacing) + 1) {
+    $i: $i - 1;
+    $space: null;
+    
+    @if ( $i == 0 ) {
+      $space: 0;
+    } @else {
+      $space: nth($spacing, $i); 
+    }
     
     .marg-#{$i} {
       margin: #{$space} !important;

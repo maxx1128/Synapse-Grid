@@ -132,6 +132,6 @@ The resulting classes will be based on your spacing sizes, and are similarly nam
 * .marg-vert-1
 * .marg-sides-1
 
-> Note: the above examples **remove** all padding and margins. The classes start using your spacing units for all numbers afterwards.
+> Note: you can use "0" to remove part or all of an element's padding or margin.
 
 ### Enjoy!

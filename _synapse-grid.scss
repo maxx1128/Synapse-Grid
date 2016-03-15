@@ -18,6 +18,10 @@
   @return map-merge($map, $new);
 }
 
+@function prepend($list, $value) {
+  @return join($value, $list);
+}
+
 // An example of how to configure Synapse's settings for the grid
 $synapse: (
   columns: 12,
@@ -88,6 +92,7 @@ $utilitiesList: (
 
 // Get a list of spacing variables from the settings
 $spacing: map-get($synapse, spaceUnits);
+$full-spacing: prepend($spacing, 0px);
 
 // Loop through the spacing settings and generate all the utilities 
 // for padding and margin placement
@@ -160,3 +165,78 @@ $spacing: map-get($synapse, spaceUnits);
       }
     }
 }
+
+@mixin generate-padding() {
+  @for $i from 1 through length($full-spacing) {
+    $space: nth($full-spacing, $i);
+    
+    .pad-#{$i} {
+      padding: #{$space} !important;
+    }
+
+    .pad-top-#{$i} {
+      padding-top: #{$space} !important;
+    }
+
+    .pad-right-#{$i} {
+      padding-right: #{$space} !important;
+    }
+
+    .pad-bottom-#{$i} {
+      padding-bottom: #{$space} !important;
+    }
+
+    .pad-left-#{$i} {
+      padding-left: #{$space} !important;
+    }
+
+    .pad-vert-#{$i} {
+      padding-top: #{$space} !important;
+      padding-bottom: #{$space} !important;
+    }
+
+    .pad-sides-#{$i} {
+      padding-right: #{$space} !important;
+      padding-left: #{$space} !important;
+    }
+  }
+}
+
+@mixin generate-margin() {
+  @for $i from 1 through length($full-spacing) {
+    $space: nth($full-spacing, $i);
+    
+    .marg-#{$i} {
+      margin: #{$space} !important;
+    }
+
+    .marg-top-#{$i} {
+      margin-top: #{$space} !important;
+    }
+
+    .marg-right-#{$i} {
+      margin-right: #{$space} !important;
+    }
+
+    .marg-bottom-#{$i} {
+      margin-bottom: #{$space} !important;
+    }
+
+    .marg-left-#{$i} {
+      margin-left: #{$space} !important;
+    }
+
+    .marg-vert-#{$i} {
+      margin-top: #{$space} !important;
+      margin-bottom: #{$space} !important;
+    }
+
+    .marg-sides-#{$i} {
+      margin-right: #{$space} !important;
+      margin-left: #{$space} !important;
+    }
+  }
+}
+
+// @include generate-padding();
+// @include generate-margin();

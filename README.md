@@ -106,4 +106,32 @@ All the included utility classes are:
 
 Custom utility classes can easily be added to the **$utilitiesList** map.
 
-## Enjoy!
+## Extra Utility Classes
+
+Include these two mixins to generate some fast utility classes for elements.
+
+```
+@include generate-padding();
+@include generate-margin();
+```
+
+The resulting classes will be based on your spacing sizes, and are similarly named to what's used in the "syn" mixin.
+
+* .pad-1
+* .pad-top-1
+* .pad-right-1
+* .pad-bottom-1
+* .pad-left-1
+* .pad-vert-1
+* .pad-sides-1
+* .marg-1
+* .marg-top-1
+* .marg-right-1
+* .marg-bottom-1
+* .marg-left-1
+* .marg-vert-1
+* .marg-sides-1
+
+> Note: the above examples **remove** all padding and margins. The classes start using your spacing units for all numbers afterwards.
+
+### Enjoy!

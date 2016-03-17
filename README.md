@@ -33,6 +33,8 @@ $synapse: (
 
 You can make the values whatever you want and add however many you want, so Synapse is very flexible. These are set as the defaults, but you can declare your own map to override them for a more custom Synapse grid.
 
+> Note: Using a breakpoint set at 0 will simply assign regular styles without a media query. This helps keep the CSS files slimmer while helping coders use Synapse consistently.
+
 ## Use the Synapse mixin to create your grid
 
 Simply use the mixin on an element to say how wide they should be at a breakpoint. You can also add offset to push or pull the column. Here are some examples:
@@ -84,27 +86,39 @@ All the included utility classes are:
 * **float-l**: Float to left
 * **float-r**: Float to right
 * **float-n**: No float
-* **block**: Display as block
-* **i-block**: Display as inline block
-* **inline**: Display as inline
-* **center-m**: Sets margin to "0 auto"
+* **float-n**: No float
+* **border-b**: Add box-sizing: border-box
 * **hide**: Hides elements with display:none
 * **pad-#**: Adds custom padding to all sides
-* **pad-t-#**: Adds custom padding to all top
-* **pad-r-#**: Adds custom padding to all right
-* **pad-b-#**: Adds custom padding to all bottom
-* **pad-l-#**: Adds custom padding to all left
-* **pad-vert-#**: Adds custom padding to the top and bottom (left and right are set to 0, this can be overridden)
-* **pad-sides-#**: Adds custom padding to the right and left (top and bottom are set to 0, this can be overridden)
+* **pad-t-#**: Adds custom padding to the top
+* **pad-r-#**: Adds custom padding to the right
+* **pad-b-#**: Adds custom padding to the bottom
+* **pad-l-#**: Adds custom padding to the left
+
+
 * **marg-#**: Adds custom margin to all sides
-* **marg-t-#**: Adds custom margin to all top
-* **marg-r-#**: Adds custom margin to all right
-* **marg-b-#**: Adds custom margin to all bottom
-* **marg-l-#**: Adds custom margin to all left
-* **marg-vert-#**: Adds custom margin to the top and bottom (left and right are set to 0, this can be overridden)
-* **marg-sides-#**: Adds custom margin to the right and left (top and bottom are set to 0, this can be overridden)
+* **marg-t-#**: Adds custom margin to the top
+* **marg-r-#**: Adds custom margin to the right
+* **marg-b-#**: Adds custom margin to the bottom
+* **marg-l-#**: Adds custom margin to the left
 
 Custom utility classes can easily be added to the **$utilitiesList** map.
+
+> Note: Want to add utility classes at certain breakpoints without changing the width? Simply put 0 for the columns, and they'll all be added without touching the width.
+
+## Column Utilitity Classes
+
+An element using the Synapse mixin isn't automatically treated as a column among many others. In order to give it the extra spacing and float properties, just add the 'col' utility class to it. This only needs to happen once and will carry over to all greater breakpoints.
+
+```
+article {
+  @include syn(xs, 12, 0, (pad-1));
+  @include syn(md, 6, 0, (pad-0, col));
+  @include syn(lg, 3, 0, (marg-b-4));
+}
+```
+
+If you want an element to stop acting as a column, include the 'no-col' utility class
 
 ## Extra Utility Classes
 
@@ -115,7 +129,7 @@ Include these two mixins to generate some fast utility classes for elements.
 @include generate-margin();
 ```
 
-The resulting classes will be based on your spacing sizes, and are similarly named to what's used in the "syn" mixin.
+The resulting classes will be based on your spacing sizes, and are similarly named to what's used in the "syn" mixin. These are different since you add them directly to an element in the HTML, not in the Sass files. Useful if you have lots of elements that need general padding or margin changes consistent with your layout but not dependent on screen sizes.
 
 * .pad-1
 * .pad-top-1

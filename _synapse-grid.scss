@@ -64,25 +64,9 @@ $utilitiesList: (
       property: float,
       value: none
     ),
-    block: ( 
-      property: display,
-      value: block !important
-    ),
-    i-block: ( 
-      property: display,
-      value: inline-block !important
-    ),
-    inline: ( 
-      property: display,
-      value: inline !important
-    ),
-    border-b: ( 
+    border-b: (
       property: box-sizing,
       value: border-box
-    ),
-    center-m: ( 
-      property: margin,
-      value: 0 auto
     ),
     hide: (
       property: display,
@@ -105,8 +89,6 @@ $full-spacing: $spacing;
   $utilitiesList: map-set(pad-r-#{$i}, padding-right, $size, $utilitiesList);
   $utilitiesList: map-set(pad-b-#{$i}, padding-bottom, $size, $utilitiesList);
   $utilitiesList: map-set(pad-l-#{$i}, padding-left, $size, $utilitiesList);
-  $utilitiesList: map-set(pad-vert-#{$i}, padding, $size 0, $utilitiesList);
-  $utilitiesList: map-set(pad-sides-#{$i}, padding, 0 $size, $utilitiesList);
 
   $utilitiesList: map-set(marg-0, margin, 0, $utilitiesList);
   $utilitiesList: map-set(marg-#{$i}, margin, $size, $utilitiesList);
@@ -114,9 +96,51 @@ $full-spacing: $spacing;
   $utilitiesList: map-set(marg-r-#{$i}, margin-right, $size, $utilitiesList);
   $utilitiesList: map-set(marg-b-#{$i}, margin-bottom, $size, $utilitiesList);
   $utilitiesList: map-set(marg-l-#{$i}, margin-left, $size, $utilitiesList);
-  $utilitiesList: map-set(marg-vert-#{$i}, margin, $size 0, $utilitiesList);
-  $utilitiesList: map-set(marg-sides-#{$i}, margin, 0 $size, $utilitiesList);
 
+}
+
+@mixin column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns) {
+  
+  @if ($columns == $totalColumns) {
+    width: 100%;
+  } @elseif ($columns != 0) {
+    width: -webkit-calc(#{$widthPer} - #{$sideMargin});
+    width: -moz-calc(#{$widthPer} - #{$sideMargin});
+    width: calc(#{$widthPer} - #{$sideMargin});
+  }
+  
+  @if ($utilities != '') {
+    @for $i from 1 through length($utilities) {
+      $utilityName: nth($utilities, $i);
+      
+      @if ($utilityName == 'col') {
+        
+        margin-right: $sideMargin/2;
+        margin-left: $sideMargin/2;
+        box-sizing: border-box;
+        
+        @if ($breakpointWidth != 0) {
+          float: left;
+        }
+        
+      } @elseif ($utilityName == 'no-col') {
+        margin-right: 0;
+        margin-left: 0;
+        float: none;
+      } @else {
+        
+        $property: map-deep-get($utilitiesList, $utilityName, "property");
+        $value: map-deep-get($utilitiesList, $utilityName, "value");
+      
+        #{$property}: $value;
+        
+      }
+    }
+  }
+  
+  @if ($offset != 0) and ($columns !='none') {
+    margin-left: percentage($offset/$totalColumns);
+  }
 }
 
 // Setup for the actual synapse mixin
@@ -126,130 +150,25 @@ $full-spacing: $spacing;
     // The total number of columns from the settings
     $totalColumns: map-get($synapse, "columns");
     $sideMargin: map-get($synapse, "side-margin");
+    
+    $widthPer: percentage($columns/$totalColumns); 
 
     
     // Sets up the media query and adds the basic grid properties and
     // width based on the number of columns in the mixin
-    @media screen and (min-width: $breakpointWidth) {
+
       
-      @if ($columns !='none' ) {
-        $widthPer: percentage($columns/$totalColumns);
+
+    @if ($breakpointWidth == 0 ) {
+      
+      @include column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns);
+      
+    } @else {
+      
+      @media screen and (min-width: $breakpointWidth) {
         
-        width: -webkit-calc(#{$widthPer} - #{$sideMargin});
-        width: -moz-calc(#{$widthPer} - #{$sideMargin});
-        width: calc(#{$widthPer} - #{$sideMargin});
-        margin-right: $sideMargin/2;
-        margin-left: $sideMargin/2;
-        box-sizing: border-box;
-        float: left;
-        clear: none;
-      }
-
-      // Loops through all utilities used in the mixin and adds their
-      // CSS properties to the element in the media query
-      @if ($utilities != '') {
-        @for $i from 1 through length($utilities) {
-          $utilityName: nth($utilities, $i);
-          $property: map-deep-get($utilitiesList, $utilityName, "property");
-          $value: map-deep-get($utilitiesList, $utilityName, "value");
-          
-          #{$property}: $value;
-        }
+        @include column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns);
       }
       
-      // If a number of offset columns were specified, adds them here
-      // Can be positive or negative for a push or pull effect
-      @if ($offset != 0) and ($columns !='none') {
-        margin-left: percentage($offset/$totalColumns);
-      }
     }
 }
-
-@mixin generate-padding() {
-  @for $i from 1 through (length($spacing) + 1) {
-    $i: $i - 1;
-    $space: null;
-    
-    @if ( $i == 0 ) {
-      $space: 0;
-    } @else {
-      $space: nth($spacing, $i); 
-    }
-    
-    .pad-#{$i} {
-      padding: #{$space} !important;
-    }
-
-    .pad-top-#{$i} {
-      padding-top: #{$space} !important;
-    }
-
-    .pad-right-#{$i} {
-      padding-right: #{$space} !important;
-    }
-
-    .pad-bottom-#{$i} {
-      padding-bottom: #{$space} !important;
-    }
-
-    .pad-left-#{$i} {
-      padding-left: #{$space} !important;
-    }
-
-    .pad-vert-#{$i} {
-      padding-top: #{$space} !important;
-      padding-bottom: #{$space} !important;
-    }
-
-    .pad-sides-#{$i} {
-      padding-right: #{$space} !important;
-      padding-left: #{$space} !important;
-    }
-  }
-}
-
-@mixin generate-margin() {
-  @for $i from 1 through (length($spacing) + 1) {
-    $i: $i - 1;
-    $space: null;
-    
-    @if ( $i == 0 ) {
-      $space: 0;
-    } @else {
-      $space: nth($spacing, $i); 
-    }
-    
-    .marg-#{$i} {
-      margin: #{$space} !important;
-    }
-
-    .marg-top-#{$i} {
-      margin-top: #{$space} !important;
-    }
-
-    .marg-right-#{$i} {
-      margin-right: #{$space} !important;
-    }
-
-    .marg-bottom-#{$i} {
-      margin-bottom: #{$space} !important;
-    }
-
-    .marg-left-#{$i} {
-      margin-left: #{$space} !important;
-    }
-
-    .marg-vert-#{$i} {
-      margin-top: #{$space} !important;
-      margin-bottom: #{$space} !important;
-    }
-
-    .marg-sides-#{$i} {
-      margin-right: #{$space} !important;
-      margin-left: #{$space} !important;
-    }
-  }
-}
-
-// @include generate-padding();
-// @include generate-margin();

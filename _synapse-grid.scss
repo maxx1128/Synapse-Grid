@@ -130,8 +130,6 @@ $full-spacing: $spacing;
     
     // Sets up the media query and adds the basic grid properties and
     // width based on the number of columns in the mixin
-    box-sizing: border-box;
-
     @media screen and (min-width: $breakpointWidth) {
       
       @if ($columns !='none' ) {
@@ -142,6 +140,7 @@ $full-spacing: $spacing;
         width: calc(#{$widthPer} - #{$sideMargin});
         margin-right: $sideMargin/2;
         margin-left: $sideMargin/2;
+        box-sizing: border-box;
         float: left;
         clear: none;
       }

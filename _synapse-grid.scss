@@ -4,7 +4,16 @@
     @each $key in $keys {
         $map: map-get($map, $key);
     }
+
     @return $map;
+}
+
+@function map-check($m, $a){
+  @if map-has-key($m, $a) {
+    @return true;
+  } @else {
+    @return false; 
+  }
 }
 
 // Function to add generated map values for padding and margin to the utilities map
@@ -32,8 +41,7 @@ $synapse: (
         lg: 1024px,
         xlg: 1200px
     ),
-  spaceUnits: (8px, 1em, 2em, 3em, 4em),
-  side-margin: 1em
+  spaceUnits: (8px, 1em, 2em, 3em, 4em)
 );
 
 // List of all basic utilities, easy to edit.
@@ -99,46 +107,31 @@ $full-spacing: $spacing;
 
 }
 
-@mixin column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns) {
+@mixin column-basics($breakpointWidth, $widthPer, $utilities, $offset, $columns, $totalColumns) {
   
   @if ($columns == $totalColumns) {
     width: 100%;
   } @elseif ($columns != 0) {
-    width: -webkit-calc(#{$widthPer} - #{$sideMargin});
-    width: -moz-calc(#{$widthPer} - #{$sideMargin});
-    width: calc(#{$widthPer} - #{$sideMargin});
+    width: $widthPer;
+    float: left;
   }
   
   @if ($utilities != '') {
     @for $i from 1 through length($utilities) {
       $utilityName: nth($utilities, $i);
       
-      @if ($utilityName == 'col') {
-        
-        margin-right: $sideMargin/2;
-        margin-left: $sideMargin/2;
-        box-sizing: border-box;
-        
-        @if ($breakpointWidth != 0) {
-          float: left;
-        }
-        
-      } @elseif ($utilityName == 'no-col') {
-        margin-right: 0;
-        margin-left: 0;
-        float: none;
-      } @else {
-        
+      @if ( map-check($utilitiesList, $utilityName) == true ) {
         $property: map-deep-get($utilitiesList, $utilityName, "property");
         $value: map-deep-get($utilitiesList, $utilityName, "value");
-      
-        #{$property}: $value;
         
+        #{$property}: $value;
+      } @elseif  ( map-check($utilitiesList, $utilityName) == false ) {
+        @include synapse-custom($utilityName);
       }
     }
   }
   
-  @if ($offset != 0) and ($columns !='none') {
+  @if ($offset != 0) {
     margin-left: percentage($offset/$totalColumns);
   }
 }
@@ -149,36 +142,18 @@ $full-spacing: $spacing;
     $breakpointWidth: map-deep-get($synapse, "layouts", $breakpoint);
     // The total number of columns from the settings
     $totalColumns: map-get($synapse, "columns");
-    $sideMargin: map-get($synapse, "side-margin");
-    
     $widthPer: percentage($columns/$totalColumns); 
 
-    
     // Sets up the media query and adds the basic grid properties and
     // width based on the number of columns in the mixin
-
-      
-
     @if ($breakpointWidth == 0 ) {
-      
-      @include column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns);
-      
+      @include column-basics($breakpointWidth, $widthPer, $utilities, $offset, $columns, $totalColumns);
     } @else {
-      
       @media screen and (min-width: $breakpointWidth) {
-        
-        @include column-basics($breakpointWidth, $widthPer, $sideMargin, $utilities, $offset, $columns, $totalColumns);
+        @include column-basics($breakpointWidth, $widthPer, $utilities, $offset, $columns, $totalColumns);
       }
-      
     }
 }
-
-
-
-
-
-
-
 
 @mixin generate-padding() {
   @for $i from 1 through (length($spacing) + 1) {
@@ -192,33 +167,33 @@ $full-spacing: $spacing;
     }
     
     .pad-#{$i} {
-      padding: #{$space} !important;
+      padding: #{$space};
     }
 
     .pad-top-#{$i} {
-      padding-top: #{$space} !important;
+      padding-top: #{$space};
     }
 
     .pad-right-#{$i} {
-      padding-right: #{$space} !important;
+      padding-right: #{$space};
     }
 
     .pad-bottom-#{$i} {
-      padding-bottom: #{$space} !important;
+      padding-bottom: #{$space};
     }
 
     .pad-left-#{$i} {
-      padding-left: #{$space} !important;
+      padding-left: #{$space};
     }
 
     .pad-vert-#{$i} {
-      padding-top: #{$space} !important;
-      padding-bottom: #{$space} !important;
+      padding-top: #{$space};
+      padding-bottom: #{$space};
     }
 
     .pad-sides-#{$i} {
-      padding-right: #{$space} !important;
-      padding-left: #{$space} !important;
+      padding-right: #{$space};
+      padding-left: #{$space};
     }
   }
 }
@@ -235,36 +210,48 @@ $full-spacing: $spacing;
     }
     
     .marg-#{$i} {
-      margin: #{$space} !important;
+      margin: #{$space};
     }
 
     .marg-top-#{$i} {
-      margin-top: #{$space} !important;
+      margin-top: #{$space};
     }
 
     .marg-right-#{$i} {
-      margin-right: #{$space} !important;
+      margin-right: #{$space};
     }
 
     .marg-bottom-#{$i} {
-      margin-bottom: #{$space} !important;
+      margin-bottom: #{$space};
     }
 
     .marg-left-#{$i} {
-      margin-left: #{$space} !important;
+      margin-left: #{$space};
     }
 
     .marg-vert-#{$i} {
-      margin-top: #{$space} !important;
-      margin-bottom: #{$space} !important;
+      margin-top: #{$space};
+      margin-bottom: #{$space};
     }
 
     .marg-sides-#{$i} {
-      margin-right: #{$space} !important;
-      margin-left: #{$space} !important;
+      margin-right: #{$space};
+      margin-left: #{$space};
     }
   }
 }
 
 // @include generate-padding();
 // @include generate-margin();
+
+/*
+@mixin synapse-custom($var) {
+  @if ($var == 'big-font') {
+    font-weight: 700;
+    font-style: italic;
+  } @elseif ($var == 'small-font') {
+    font-weight: 300;
+    text-decoration: underline;
+  }
+}
+*/

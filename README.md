@@ -24,16 +24,10 @@ $synapse: (
         xlg: 1200px
     ),
   spaceUnits: (8px, 1em, 2em, 3em, 4em),
-  side-margin: 1em
-
 );
 ```
 
-> Side margin is the margin on the right and right of every column that separates it from the others. This value will be split in half between both sides.
-
 You can make the values whatever you want and add however many you want, so Synapse is very flexible. These are set as the defaults, but you can declare your own map to override them for a more custom Synapse grid.
-
-> Note: Using a breakpoint set at 0 will simply assign regular styles without a media query. This helps keep the CSS files slimmer while helping coders use Synapse consistently.
 
 ## Use the Synapse mixin to create your grid
 
@@ -95,7 +89,6 @@ All the included utility classes are:
 * **pad-b-#**: Adds custom padding to the bottom
 * **pad-l-#**: Adds custom padding to the left
 
-
 * **marg-#**: Adds custom margin to all sides
 * **marg-t-#**: Adds custom margin to the top
 * **marg-r-#**: Adds custom margin to the right
@@ -106,19 +99,26 @@ Custom utility classes can easily be added to the **$utilitiesList** map.
 
 > Note: Want to add utility classes at certain breakpoints without changing the width? Simply put 0 for the columns, and they'll all be added without touching the width.
 
-## Column Utilitity Classes
+## Custom Utility Classes
 
-An element using the Synapse mixin isn't automatically treated as a column among many others. In order to give it the extra spacing and float properties, just add the 'col' utility class to it. This only needs to happen once and will carry over to all greater breakpoints.
+You can create custom utility classes with multiple styles to better manage your CSS across different breakpoints. Simply copy the **synapse-custom** below and add them in the following format, then reference them in your utilities class.
 
 ```
+@mixin synapse-custom($var) { // Add this to your stylesheet
+  @if ($var == 'big-font') {
+    font-weight: 700;
+    font-style: italic;
+  } @elseif ($var == 'small-font') {
+    font-weight: 300;
+    text-decoration: underline;
+  }
+}
+
 article {
-  @include syn(xs, 12, 0, (pad-1));
-  @include syn(md, 6, 0, (pad-0, col));
-  @include syn(lg, 3, 0, (marg-b-4));
+  @include syn(xs, 12, 0, (pad-1, small-font));
+  @include syn(sm, 10, 1, (pad-2, big-font));
 }
 ```
-
-If you want an element to stop acting as a column, include the 'no-col' utility class
 
 ## Extra Utility Classes
 

@@ -69,9 +69,11 @@ Some examples explaining the utility classes follow:
 @include syn(lg, 0, 0, (pad-4)); 
 // The element will add extra padding without changing the width or offset
 
-@include syn(xlg, 6, 0, (hide)); 
+@include syn(xlg, 0, 0, (hide)); 
 // The entire element will be hidden at this breakpoint
 ```
+
+> If you want to use Synapse similarly to a traditional grid system, add the "float-l" or "float-r" utilities. These will make sure the items line up next to each other. For example, if you want a sidebar to take up three columns on the right side of a screen on a certain width, add the "float-r" utility on that breakpoint.
 
 All the included utility classes are:
 * **align-l**: Align text to the left
@@ -79,7 +81,6 @@ All the included utility classes are:
 * **align-c**: Align text in center
 * **float-l**: Float to left
 * **float-r**: Float to right
-* **float-n**: No float
 * **float-n**: No float
 * **border-b**: Add box-sizing: border-box
 * **hide**: Hides elements with display:none

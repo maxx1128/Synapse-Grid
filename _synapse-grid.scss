@@ -113,7 +113,6 @@ $full-spacing: $spacing;
     width: 100%;
   } @elseif ($columns != 0) {
     width: $widthPer;
-    float: left;
   }
   
   @if ($utilities != '') {

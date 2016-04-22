@@ -44,11 +44,13 @@ You may be wondering what the empty mixin variable is at the end. That's where y
 If you don't want any utilities in your element, use the same syntax as above.
 
 Utility classes for padding and margin are set in your settings. With the spacing units above, the spacing utilities would be like this:
+* **pad-0:** 0 padding on all sides
 * **pad-1:** 8px of padding on all sides
 * **pad-2:** 1em of padding on all sides
 * **pad-3:** 2em of padding on all sides
 * **pad-4:** 3em of padding on all sides
 * **pad-5:** 4em of padding on all sides
+* **marg-0:** 0 margin on all sides
 * **marg-1:** 8px of margin on all sides
 * **marg-2:** 1em of margin on all sides
 * **marg-3:** 2em of margin on all sides
@@ -76,6 +78,9 @@ Some examples explaining the utility classes follow:
 > If you want to use Synapse similarly to a traditional grid system, add the "float-l" or "float-r" utilities. These will make sure the items line up next to each other. For example, if you want a sidebar to take up three columns on the right side of a screen on a certain width, add the "float-r" utility on that breakpoint.
 
 All the included utility classes are:
+* **block**: Display as block
+* **inline-b**: Display as inline block
+* **inline**: Display as inline
 * **align-l**: Align text to the left
 * **align-r**: Align text to the right
 * **align-c**: Align text in center
@@ -83,26 +88,37 @@ All the included utility classes are:
 * **float-r**: Float to right
 * **float-n**: No float
 * **border-b**: Add box-sizing: border-box
+* **center-m**: Margin auto for left and right sides
 * **hide**: Hides elements with display:none
 * **pad-#**: Adds custom padding to all sides
 * **pad-t-#**: Adds custom padding to the top
 * **pad-r-#**: Adds custom padding to the right
 * **pad-b-#**: Adds custom padding to the bottom
 * **pad-l-#**: Adds custom padding to the left
+* **pad-tr-#**: Adds custom padding to the top and right
+* **pad-tl-#**: Adds custom padding to the top and left
+* **pad-br-#**: Adds custom padding to the bottom and right
+* **pad-bl-#**: Adds custom padding to the bottom and left
+* **pad-vert-#**: Adds custom padding to the top and bottom
+* **pad-sides-#**: Adds custom padding to the right and left
 
 * **marg-#**: Adds custom margin to all sides
 * **marg-t-#**: Adds custom margin to the top
 * **marg-r-#**: Adds custom margin to the right
 * **marg-b-#**: Adds custom margin to the bottom
 * **marg-l-#**: Adds custom margin to the left
-
-Custom utility classes can easily be added to the **$utilitiesList** map.
+* **marg-tr-#**: Adds custom margin to the top and right
+* **marg-tl-#**: Adds custom margin to the top and left
+* **marg-br-#**: Adds custom margin to the bottom and right
+* **marg-bl-#**: Adds custom margin to the bottom and left
+* **marg-vert-#**: Adds custom margin to the top and bottom
+* **marg-sides-#**: Adds custom margin to the right and left
 
 > Note: Want to add utility classes at certain breakpoints without changing the width? Simply put 0 for the columns, and they'll all be added without touching the width.
 
 ## Custom Utility Classes
 
-You can create custom utility classes with multiple styles to better manage your CSS across different breakpoints. Simply copy the **synapse-custom** below and add them in the following format, then reference them in your utilities class.
+You can create custom utility classes with multiple styles to better manage your CSS across different breakpoints. Simply copy the **synapse-custom** mixin below and add them in the following format, then reference them in your utilities class.
 
 ```
 @mixin synapse-custom($var) { // Add this to your stylesheet
@@ -149,4 +165,4 @@ The resulting classes will be based on your spacing sizes, and are similarly nam
 
 > Note: you can use "0" to remove part or all of an element's padding or margin.
 
-### Enjoy!
+## Enjoy!

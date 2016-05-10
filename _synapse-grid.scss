@@ -128,7 +128,7 @@ $utilities-list: (
     hide: (
       num: 1,
       property: display,
-      value: none !important
+      value: none
     )
   );
 
@@ -226,6 +226,76 @@ $full-spacing: $spacing;
   } @else {
     @media screen and (min-width: $breakpoint-width) {
       @include column-basics($breakpoint-width, $width-per, $utilities, $offset, $columns, $total-columns);
+    }
+  }
+}
+
+@mixin generate-grid-classes($row-pad, $col-pad, $max-width: 0) {
+  $syn-layouts: map-get($synapse, layouts);
+  $syn-columns: map-get($synapse, columns);
+  $syn-row-padding: nth($syn-spacing, $row-pad);
+  $syn-col-padding: nth($syn-spacing, $col-pad);
+
+
+  .syn-row {
+    width: 100%;
+    max-width: $max-width;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+
+    
+    @if ($syn-row-padding != 0) {
+      padding-left: $syn-row-padding;
+      padding-right: $syn-row-padding;
+    }
+    
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+  }
+  
+  .syn-col {
+    width: 100%;
+    float: left;
+    display: block;
+    box-sizing: border-box;
+    
+    @if ($syn-col-padding != 0) {
+      box-sizing: border-box;
+      padding-left: $syn-col-padding;
+      padding-right: $syn-col-padding;
+    }
+  }
+
+  @each $label, $size in $syn-layouts {
+    
+    @if ($size == 0) {
+      @for $i from 1 through ($syn-columns) {
+        .syn-#{$label}-#{$i} {
+          width: percentage($i/$syn-columns);
+        }
+        .syn-offset-#{$label}-#{$i} {
+          margin-left: percentage($i/$syn-columns);
+        }
+      }
+    } @else {
+      @media screen and (min-width: $size) {
+        @for $i from 1 through ($syn-columns) {
+          .syn-#{$label}-#{$i} {
+            width: percentage($i/$syn-columns);
+          }
+          
+          .syn-#{$label}-offset-#{$i} {
+            margin-left: percentage($i/$syn-columns);
+          }
+        }
+      }
     }
   }
 }
@@ -333,3 +403,4 @@ $full-spacing: $spacing;
 
 // @include generate-padding();
 // @include generate-margin();
+// @include generate-grid-classes();

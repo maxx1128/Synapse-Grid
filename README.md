@@ -137,6 +137,32 @@ article {
 }
 ```
 
+## Expressive Grid Generator
+
+If you're more of an Expressive CSS fan, Synapse lets you generate a grid system based on your settings. Simply use the following mixin:
+
+```
+// @include generate-grid-classes($row-padding, $col-padding, $max-width);
+```
+
+You'll then have HTML classes for making a responsive grid. How they're named, the column amounts, and their breakpoints all come from your config file. For the config in this README, some examples are:
+
+```
+<section class="syn-row">
+  <article class="syn-col syn-xs-12 syn-sm-6 syn-md-2 syn-offset-md-1"></article>
+  <article class="syn-col syn-xs-12 syn-sm-6 syn-md-3"></article>
+  <article class="syn-col syn-xs-12 syn-sm-6 syn-md-3"></article>
+  <article class="syn-col syn-xs-12 syn-sm-6 syn-md-2 syn-offset-md-1"></article>
+</section>
+```
+
+The container element needs the `syn-row` class, and all columns need the `syn-col` class in addition to the ones that set the different sizes.
+
+This mixin needs three arguments to help you customize your grid more:
+* *row-padding* is your spacing unit for the padding on the sides of row elements. Using "1" creates zero padding, "2" is your first unit of spacing from your config, "3" is the following, and so on.
+* *col-padding* is the same as above, but for your columns' side padding
+* *max-width* is how wide your rows can get before stopping and centering.
+
 ## Extra Utility Classes
 
 Include these two mixins to generate some fast utility classes for elements.
